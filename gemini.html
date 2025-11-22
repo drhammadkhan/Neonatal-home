@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HO.ME - Neonatal Unit Finder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .network-card { transition: all 0.2s; }
+        .network-card:hover { transform: translateY(-2px); shadow: lg; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-800 font-sans">
+
+    <!-- Header -->
+    <header class="bg-indigo-600 text-white py-8 shadow-lg">
+        <div class="container mx-auto px-4 max-w-3xl text-center">
+            <h1 class="text-4xl font-bold mb-2">HO.ME</h1>
+            <p class="text-indigo-100 text-lg">HOspital near ME: Neonatal Unit Finder</p>
+            <p class="text-xs text-indigo-300 mt-2 uppercase tracking-wide">Based on Sept 2025 Guidelines</p>
+        </div>
+    </header>
+
+    <!-- Main Search Section -->
+    <main class="container mx-auto px-4 max-w-2xl -mt-6">
+        <div class="bg-white rounded-xl shadow-xl p-6 border border-slate-100">
+            <label class="block text-sm font-semibold text-slate-500 mb-2 uppercase tracking-wider">Enter Patient Postcode</label>
+            <div class="relative">
+                <input type="text" id="searchInput" 
+                    class="w-full p-4 text-lg border-2 border-slate-200 rounded-lg focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 outline-none transition-all"
+                    placeholder="e.g. SW19, E1, N12..."
+                    autocomplete="off">
+                <div class="absolute right-4 top-4 text-slate-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </div>
+            </div>
+            
+            <!-- Results Area -->
+            <div id="resultContainer" class="hidden mt-6 bg-indigo-50 rounded-lg p-6 border border-indigo-100 animate-fade-in">
+                <h3 class="text-sm font-bold text-indigo-400 uppercase mb-1">Designated Neonatal Unit</h3>
+                <div id="hospitalName" class="text-3xl font-bold text-indigo-900 mb-2"></div>
+                <div class="flex items-center gap-2">
+                    <span class="text-sm font-semibold text-slate-500">Network:</span>
+                    <span id="networkName" class="px-3 py-1 bg-white rounded-full text-xs font-bold text-indigo-600 shadow-sm border border-indigo-100"></span>
+                </div>
+            </div>
+
+            <div id="noResult" class="hidden mt-4 text-center p-4 text-slate-400 italic">
+                No specific match found. Please check the postcode or refer to the network map.
+            </div>
+        </div>
+
+        <!-- Networks Reference -->
+        <div class="mt-12 mb-20">
+            <h2 class="text-2xl font-bold text-slate-800 mb-6 text-center">London Neonatal Networks</h2>
+            <div class="grid gap-4 md:grid-cols-2">
+                
+                <!-- North Central -->
+                <div class="bg-white p-5 rounded-lg shadow border-l-4 border-blue-500 network-card">
+                    <h3 class="font-bold text-lg text-slate-700 mb-2">North Central London</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        Royal Free, North Middlesex, Barnet, Whittington<br>
+                        <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded">Specialist: UCH, GOSH</span>
+                    </p>
+                </div>
+
+                <!-- North West -->
+                <div class="bg-white p-5 rounded-lg shadow border-l-4 border-teal-500 network-card">
+                    <h3 class="font-bold text-lg text-slate-700 mb-2">North West London</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        West Middlesex, Hillingdon, Northwick Park, St. Mary's, Chelsea & Westminster<br>
+                        <span class="text-xs font-bold text-teal-600 bg-teal-50 px-2 py-0.5 rounded">Specialist: Queen Charlotte's</span>
+                    </p>
+                </div>
+
+                <!-- North East -->
+                <div class="bg-white p-5 rounded-lg shadow border-l-4 border-emerald-500 network-card">
+                    <h3 class="font-bold text-lg text-slate-700 mb-2">North East London</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        Queen's Romford, Newham, Whipps Cross, Homerton<br>
+                        <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">Specialist: Royal London</span>
+                    </p>
+                </div>
+
+                <!-- South West -->
+                <div class="bg-white p-5 rounded-lg shadow border-l-4 border-orange-500 network-card">
+                    <h3 class="font-bold text-lg text-slate-700 mb-2">South West London</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        Epsom, Kingston, Croydon, St. Helier's<br>
+                        <span class="text-xs font-bold text-orange-600 bg-orange-50 px-2 py-0.5 rounded">Specialist: St. George's</span>
+                    </p>
+                </div>
+
+                <!-- South East -->
+                <div class="bg-white p-5 rounded-lg shadow border-l-4 border-purple-500 network-card">
+                    <h3 class="font-bold text-lg text-slate-700 mb-2">South East London</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        Lewisham, QEW, PRUH, King's College<br>
+                        <span class="text-xs font-bold text-purple-600 bg-purple-50 px-2 py-0.5 rounded">Specialist: St. Thomas' (GSTT), Evelina</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Data extracted from the "Hospital-near-me.pdf" document
+        const postcodeData = {
+            "BR1": "PRUH / QEW", "BR2": "PRUH", "BR3": "PRUH / QEW", "BR4": "PRUH", "BR5": "PRUH", "BR6": "PRUH", "BR7": "PRUH", "BR8": "PRUH",
+            "CR0": "Croydon / St. Helier", "CR2": "Croydon", "CR3": "Croydon", "CR4": "St. Helier", "CR5": "Croydon / St. Helier / Epsom", "CR6": "Croydon", 
+            "CR7": "Croydon / St. Helier", "CR8": "Croydon / St. Helier", "CR9": "Croydon", "CR90": "Croydon",
+            "DA1": "QEW", "DA14": "QEW / PRUH", "DA15": "QEW", "DA16": "QEW", "DA17": "QEW", "DA18": "QEW", "DA5": "QEW", "DA6": "QEW", "DA7": "QEW", "DA8": "QEW",
+            "E1": "Royal London / Homerton", "E10": "Homerton / Whipps Cross", "E11": "Whipps Cross / Homerton", "E12": "Newham / Whipps Cross", "E13": "Newham", 
+            "E14": "Royal London", "E15": "Newham / Homerton", "E16": "Newham", "E17": "Whipps Cross", "E18": "Whipps Cross", "E1W": "Royal London", 
+            "E2": "Royal London / Homerton", "E22": "Royal London", "E3": "Royal London / Newham", "E4": "Whipps Cross / North Middlesex", "E5": "Homerton / Whipps Cross", 
+            "E6": "Newham", "E7": "Newham / Whipps Cross / Homerton", "E8": "Homerton", "E9": "Homerton / Royal London", "E98": "Royal London",
+            "EC1A": "Homerton / UCLH", "EC1M": "UCLH / Homerton", "EC1N": "UCLH / Homerton", "EC1P": "UCLH", "EC1R": "UCLH", "EC1V": "UCLH / Homerton / Whittington", 
+            "EC1Y": "UCLH / Homerton", "EC2A": "Homerton / UCLH", "EC2M": "Homerton / UCLH / Royal London", "EC2N": "Homerton", "EC2P": "Homerton", "EC2R": "Homerton", 
+            "EC2V": "Homerton", "EC2Y": "Homerton / UCLH", "EC3A": "Homerton", "EC3M": "Homerton", "EC3N": "Homerton / Royal London", "EC3P": "Homerton / UCLH", 
+            "EC3R": "Homerton", "EC3V": "Homerton", "EC4A": "Homerton / UCLH", "EC4M": "Homerton", "EC4N": "Homerton", "EC4P": "UCLH", "EC4R": "Homerton", 
+            "EC4V": "Homerton", "EC4Y": "Homerton / UCLH",
+            "EN1": "North Middlesex / Barnet", "EN2": "Barnet / North Middlesex", "EN3": "North Middlesex", "EN4": "Barnet", "EN5": "Barnet", "EN6": "Barnet", "EN8": "North Middlesex",
+            "HA0": "Northwick Park", "HA1": "Northwick Park", "HA2": "Northwick Park", "HA3": "Northwick Park", "HA4": "Hillingdon / Northwick Park", "HA5": "Northwick Park / Hillingdon", 
+            "HA6": "Hillingdon", "HA7": "Northwick Park", "HA8": "Barnet / Northwick Park", "HA9": "Northwick Park",
+            "IG1": "Queens Romford / Whipps Cross", "IG11": "Newham / Queens Romford", "IG2": "Queens Romford / Whipps Cross", "IG3": "Queens Romford", "IG4": "Whipps Cross", 
+            "IG5": "Whipps Cross", "IG6": "Whipps Cross / Queens Romford", "IG7": "Queens Romford", "IG8": "Whipps Cross", "IG9": "Whipps Cross",
+            "KT1": "Kingston", "KT17": "Epsom / St. Helier", "KT18": "Epsom", "KT19": "Epsom / Kingston", "KT2": "Kingston", "KT22": "Epsom", "KT3": "Kingston / St. Helier", 
+            "KT4": "St. Helier / Kingston / Epsom", "KT5": "Kingston", "KT6": "Kingston", "KT7": "Kingston", "KT8": "Kingston", "KT9": "Kingston",
+            "N1": "Whittington / Homerton / UCLH", "N10": "Whittington / Royal Free / Barnet", "N11": "Royal Free / Barnet / North Mid", "N12": "Barnet / Royal Free", 
+            "N13": "Barnet / Royal Free / North Mid", "N14": "Royal Free / Barnet", "N15": "North Middlesex / Homerton", "N16": "Homerton / Whittington", 
+            "N17": "North Middlesex", "N18": "North Middlesex", "N19": "Whittington / UCH / Royal Free", "N1C": "UCH", "N1P": "Whittington", 
+            "N2": "Royal Free / Whittington / Barnet", "N20": "Royal Free / Barnet", "N21": "Barnet / North Middlesex", "N22": "North Middlesex / Whittington", 
+            "N3": "Royal Free / Barnet", "N4": "North Middlesex / Whittington / Homerton", "N5": "Whittington / Homerton", "N6": "Whittington / Royal Free", 
+            "N7": "Whittington / UCH", "N8": "Whittington / North Middlesex", "N81": "Newham / North Middlesex", "N9": "North Middlesex",
+            "NW1": "UCH / St. Marys / Royal Free", "NW10": "Northwick Park / Queen Charlottes / St. Marys", "NW11": "Royal Free / Barnet", "NW1W": "UCH", 
+            "NW2": "Royal Free / Northwick Park / St. Marys", "NW3": "Royal Free / Barnet", "NW4": "Royal Free / Barnet", "NW5": "Royal Free / UCH", 
+            "NW6": "St. Marys / Royal Free", "NW7": "Barnet / Royal Free", "NW8": "St. Marys / Royal Free", "NW9": "Northwick Park / Royal Free / Barnet",
+            "RM1": "Queens Romford", "RM10": "Queens Romford", "RM11": "Queens Romford", "RM12": "Queens Romford", "RM13": "Queens Romford", 
+            "RM14": "Queens Romford", "RM15": "Queens Romford", "RM2": "Queens Romford", "RM3": "Queens Romford", "RM4": "Queens Romford", 
+            "RM5": "Queens Romford", "RM6": "Queens Romford", "RM7": "Queens Romford", "RM8": "Queens Romford", "RM9": "Queens Romford / Newham",
+            "SE1": "GSTT / Kings", "SE10": "QEW", "SE11": "GSTT / Kings", "SE12": "QEW", "SE13": "QEW", "SE14": "Lewisham / QEW / Kings", "SE15": "Kings / GSTT / Lewisham", 
+            "SE16": "GSTT / Lewisham", "SE17": "GSTT", "SE18": "QEW", "SE19": "Croydon / Kings / PRUH", "SE1P": "GSTT", "SE2": "QEW", "SE20": "PRUH", 
+            "SE21": "Kings", "SE22": "Kings", "SE23": "QEW / Kings", "SE24": "Kings", "SE25": "Croydon", "SE26": "QEW / PRUH / Kings", "SE27": "Kings", 
+            "SE28": "QEW", "SE3": "QEW", "SE4": "QEW / Kings", "SE5": "Kings / GSTT", "SE6": "QEW", "SE7": "QEW", "SE8": "Lewisham / QEW / GSTT", "SE9": "QEW / PRUH",
+            "SM1": "St. Helier", "SM2": "St. Helier / Epsom", "SM3": "St. Helier", "SM4": "St. Helier", "SM5": "St. Helier", "SM6": "St. Helier", "SM7": "Epsom / St. Helier",
+            "SW10": "Chelsea Westminster", "SW11": "St. Georges", "SW12": "St. Georges / GSTT", "SW13": "Kingston", "SW14": "Kingston", "SW15": "St. Georges / Kingston", 
+            "SW16": "GSTT / Kings / St. Georges / Croydon / St. Helier", "SW17": "St. Georges / St. Helier", "SW18": "St. Georges / St. Helier", "SW19": "St. Helier / St. Georges", 
+            "SW1A": "Chelsea Westminster", "SW1E": "Chelsea Westminster", "SW1H": "Chelsea Westminster", "SW1P": "Chelsea Westminster", "SW1V": "Chelsea Westminster / St. Georges", 
+            "SW1W": "Chelsea Westminster", "SW1X": "Chelsea Westminster", "SW1Y": "Chelsea Westminster", "SW2": "Kings / GSTT", "SW20": "St. Helier / Kingston", 
+            "SW3": "Chelsea Westminster", "SW4": "GSTT / St. Georges", "SW5": "Chelsea Westminster", "SW6": "Chelsea Westminster", "SW7": "Chelsea Westminster", 
+            "SW8": "GSTT / St. Georges", "SW9": "GSTT / Kings", "SW95": "St. Georges",
+            "TN14": "PRUH", "TN16": "PRUH",
+            "TW1": "West Middlesex", "TW10": "Kingston", "TW11": "Kingston / West Middlesex", "TW12": "Kingston / West Middlesex", "TW13": "West Middlesex", 
+            "TW14": "West Middlesex", "TW15": "West Middlesex", "TW19": "West Middlesex", "TW2": "West Middlesex", "TW3": "West Middlesex", "TW4": "West Middlesex", 
+            "TW5": "West Middlesex", "TW6": "West Middlesex", "TW7": "West Middlesex", "TW8": "West Middlesex / Queen Charlottes", "TW9": "Kingston",
+            "UB1": "Queen Charlottes / Hillingdon / West Middlesex", "UB10": "Hillingdon", "UB11": "Hillingdon", "UB18": "West Middlesex", "UB2": "West Middlesex / Queen Charlottes", 
+            "UB3": "Hillingdon", "UB4": "Hillingdon", "UB5": "Hillingdon / Northwick Park", "UB6": "Northwick Park / Queen Charlottes", "UB7": "Hillingdon", "UB8": "Hillingdon", "UB9": "Hillingdon",
+            "W10": "St. Marys", "W11": "St. Marys / Chelsea Westminster", "W12": "Queen Charlottes / St. Marys", "W13": "Queen Charlottes / West Middlesex", "W14": "Chelsea Westminster", 
+            "W1A": "UCH", "W1B": "UCH / St. Marys", "W1C": "St. Marys", "W1D": "UCH", "W1F": "UCH", "W1G": "St. Marys", "W1H": "St. Marys", "W1J": "St. Marys / Chelsea Westminster", 
+            "W1K": "St. Marys", "W1S": "St. Marys", "W1T": "UCH", "W1U": "St. Marys", "W2": "St. Marys", "W3": "Queen Charlottes / Northwick Park", "W4": "Queen Charlottes / Chelsea Westminster", 
+            "W5": "Queen Charlottes / West Middlesex / Northwick Park", "W6": "Queen Charlottes / Chelsea Westminster", "W7": "Queen Charlottes / West Middlesex", "W8": "Chelsea Westminster", "W9": "St. Marys",
+            "WC1A": "UCH", "WC1B": "UCH", "WC1E": "UCH", "WC1H": "UCH", "WC1N": "UCH", "WC1R": "UCH", "WC1V": "UCH", "WC1X": "UCH", "WC2A": "UCH", "WC2B": "UCH", "WC2E": "UCH", 
+            "WC2H": "UCH / Chelsea Westminster", "WC2N": "UCH / Chelsea Westminster", "WC2R": "UCH",
+            "WD23": "Northwick Park", "WD3": "Hillingdon", "WD6": "Barnet"
+        };
+
+        const hospitalNetworks = {
+            "North Central": ["Royal Free", "North Middlesex", "Barnet", "Whittington", "UCH", "GOSH"],
+            "North West": ["West Middlesex", "Hillingdon", "Northwick Park", "St. Marys", "St. Mary's", "Chelsea Westminster", "Queen Charlottes"],
+            "North East": ["Queens Romford", "Newham", "Whipps Cross", "Homerton", "Royal London"],
+            "South West": ["Epsom", "Kingston", "Croydon", "St. Helier", "St. Helier's", "St. Georges", "St. George's"],
+            "South East": ["Lewisham", "QEW", "Queen Elizabeth", "PRUH", "Kings", "King's", "GSTT", "Evelina"]
+        };
+
+        function findNetwork(hospitalString) {
+            // Split by slash to handle multiple hospitals
+            const hospitals = hospitalString.split('/').map(h => h.trim());
+            const primaryHospital = hospitals[0]; // Use first as primary for network lookup
+            
+            for (const [network, unitList] of Object.entries(hospitalNetworks)) {
+                // Check if any part of the hospital name matches our list
+                if (unitList.some(unit => primaryHospital.includes(unit))) {
+                    return network;
+                }
+            }
+            return "Outside London / Other";
+        }
+
+        const searchInput = document.getElementById('searchInput');
+        const resultContainer = document.getElementById('resultContainer');
+        const hospitalNameEl = document.getElementById('hospitalName');
+        const networkNameEl = document.getElementById('networkName');
+        const noResultEl = document.getElementById('noResult');
+
+        searchInput.addEventListener('input', (e) => {
+            const input = e.target.value.toUpperCase().trim();
+            
+            // Basic UK postcode regex to extract outward code (e.g. "SW19" from "SW19 5XX")
+            // If input is short (3-4 chars), assume it's the outward code.
+            // If long, split by space or take first part.
+            let outwardCode = input.split(' ')[0];
+            
+            // If the input is just 1-2 chars, don't search yet to avoid noise
+            if (outwardCode.length < 2) {
+                resultContainer.classList.add('hidden');
+                noResultEl.classList.add('hidden');
+                return;
+            }
+
+            const hospital = postcodeData[outwardCode];
+
+            if (hospital) {
+                hospitalNameEl.textContent = hospital;
+                networkNameEl.textContent = findNetwork(hospital);
+                
+                resultContainer.classList.remove('hidden');
+                noResultEl.classList.add('hidden');
+            } else {
+                // Only show "No result" if user has typed a potentially valid length code
+                if (outwardCode.length >= 3) {
+                    resultContainer.classList.add('hidden');
+                    noResultEl.classList.remove('hidden');
+                } else {
+                    resultContainer.classList.add('hidden');
+                    noResultEl.classList.add('hidden');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
