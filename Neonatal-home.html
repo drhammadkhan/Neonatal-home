@@ -120,7 +120,7 @@
     <input
       id="searchInput"
       type="text"
-      placeholder="Enter full postcode (e.g. SE1 7EH), outward code (e.g. SE1), area prefix (e.g. SE) or hospital name (e.g. Queen's Romford)…"
+      placeholder="Enter full postcode (e.g. SE1 7EH or sw185bd), outward code (e.g. SE1, SW12), area prefix (e.g. SE), or hospital name (e.g. Queen's Romford)…"
     />
     <div class="hint">
       Data source: London Neonatal Networks &amp; HO.ME tool (Sept 2025). Try typing “SE”, “SW”, “NW”, “E”, etc. to see all units covering that area.
@@ -575,6 +575,14 @@
       "SM5": ["St. Helier"],
       "SM6": ["St. Helier"],
       "SM7": ["Epsom", "St. Helier"],
+      "SW1A": ["Chelsea & Westminster"],
+      "SW1E": ["Chelsea & Westminster"],
+      "SW1H": ["Chelsea & Westminster"],
+      "SW1P": ["Chelsea & Westminster"],
+      "SW1V": ["Chelsea & Westminster", "St. George's"],
+      "SW1W": ["Chelsea & Westminster"],
+      "SW1X": ["Chelsea & Westminster"],
+      "SW1Y": ["Chelsea & Westminster"],
       "SW10": ["Chelsea & Westminster"],
       "SW11": ["St. George's"],
       "SW12": ["St. George's", "GSTT"],
@@ -585,14 +593,6 @@
       "SW17": ["St. George's", "St. Helier"],
       "SW18": ["St. George's", "St. Helier"],
       "SW19": ["St. Helier", "St. George's"],
-      "SW1A": ["Chelsea & Westminster"],
-      "SW1E": ["Chelsea & Westminster"],
-      "SW1H": ["Chelsea & Westminster"],
-      "SW1P": ["Chelsea & Westminster"],
-      "SW1V": ["Chelsea & Westminster", "St. George's"],
-      "SW1W": ["Chelsea & Westminster"],
-      "SW1X": ["Chelsea & Westminster"],
-      "SW1Y": ["Chelsea & Westminster"],
       "SW2": ["King's", "GSTT"],
       "SW20": ["St. Helier", "Kingston"],
       "SW3": ["Chelsea & Westminster"],
@@ -686,28 +686,35 @@
     }
 
     function isFullPostcode(str) {
+      // Basic UK postcode pattern, spacing optional
       return /^[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}$/.test(str);
     }
 
     function isOutwardCode(str) {
+      // Outward code: letters + digit(s), no inward part
       return /^[A-Z]{1,2}\d[A-Z\d]?$/.test(str);
     }
 
-    // NEW: 1–2 letter area prefix (N, E, EC, SE, SW, NW, W, BR, CR, RM, etc.)
+    // Area prefix: 1–2 letters only (N, E, EC, SE, SW, etc.)
     function isAreaPrefix(str) {
       return /^[A-Z]{1,2}$/.test(str);
     }
 
+    // NEW: robust outward extractor for full postcodes, with or without space
     function outwardFromPostcode(pc) {
-      return normaliseInput(pc).split(/\s+/)[0];
+      // Remove spaces, uppercase
+      const clean = normaliseInput(pc).replace(/\s+/g, "");
+      // UK postcodes end with 3-char inward code (e.g. 5BD)
+      if (clean.length <= 3) return clean; // fallback, shouldn't normally happen
+      return clean.slice(0, clean.length - 3);
     }
 
     function findUnitMetaByName(name) {
       const target = name.trim().toLowerCase();
       return (
         units.find(u =>
-          u.aliases.some(a => a.toLowerCase() === target) ||
-          u.name.toLowerCase() === target
+          u.name.toLowerCase() === target ||
+          u.aliases.some(a => a.toLowerCase() === target)
         ) || null
       );
     }
@@ -747,7 +754,7 @@
       return results;
     }
 
-    // NEW: find all units for an area prefix (N, E, EC, SE, SW, etc.)
+    // Area prefix search (N, EC, SE, SW, RM, etc.)
     function findUnitsByPrefix(prefix) {
       const p = prefix.toUpperCase();
       const seen = new Set();
@@ -755,7 +762,6 @@
 
       for (const outward of Object.keys(outwardToUnits)) {
         if (!outward.startsWith(p)) continue;
-
         const unitsForOutward = findUnitsByOutward(outward);
         unitsForOutward.forEach(u => {
           const key = (u.name || "") + "|" + (u.network || "") + "|" + (u.outside ? "1" : "0");
@@ -765,7 +771,6 @@
           }
         });
       }
-
       return results;
     }
 
@@ -894,8 +899,17 @@
         const unitsFound = findUnitsByOutward(outward);
         renderResults(unitsFound, `Full postcode detected. Outward code: ${outward}.`);
       } else if (isOutwardCode(value)) {
-        const unitsFound = findUnitsByOutward(value);
-        renderResults(unitsFound, `Outward code: ${value}.`);
+        const exact = outwardToUnits[value];
+        if (exact) {
+          const unitsFound = findUnitsByOutward(value);
+          renderResults(unitsFound, `Outward code: ${value}.`);
+        } else {
+          const unitsFound = findUnitsByPrefix(value);
+          renderResults(
+            unitsFound,
+            `No exact outward code “${value}” in the table – showing all units for codes starting with “${value}”.`
+          );
+        }
       } else if (isAreaPrefix(value)) {
         const unitsFound = findUnitsByPrefix(value);
         renderResults(
@@ -917,4 +931,3 @@
   </script>
 </body>
 </html>
-
