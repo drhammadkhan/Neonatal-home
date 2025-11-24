@@ -764,10 +764,23 @@
       return /^[A-Z]{1,2}$/.test(str);
     }
 
-    function outwardFromPostcode(pc) {
-      return normaliseInput(pc).split(/\s+/)[0];
-    }
 
+
+    function outwardFromPostcode(pc) {
+  // Normalise and strip spaces
+  const value = normaliseInput(pc).replace(/\s+/g, "");
+
+  // UK outward code = everything except the last 3 characters
+  if (value.length > 3) {
+    return value.slice(0, value.length - 3);
+  }
+
+  // Fallback – in case someone types something odd but passes regex
+  return value;
+}
+
+
+    
     function findUnitMetaByName(name) {
       const target = name.trim().toLowerCase();
       return (
