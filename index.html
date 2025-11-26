@@ -16,13 +16,14 @@
       margin-bottom: 1.5rem;
     }
     h1 {
-      font-size: 1.6rem;
-      margin: 0 0 0.25rem;
+      font-size: 1.8rem; /* INCREASED SIZE for HO.ME title */
+      margin: 0;
       color: #005eb8;
     }
     .subtitle {
       font-size: 0.9rem;
       color: #444;
+      margin-top: 0.6rem; /* INCREASED SPACE BELOW H1 */
     }
     .search-box {
       margin: 1rem 0;
@@ -105,11 +106,28 @@
       font-size: 0.75rem;
       color: #666;
     }
+    /* New Style for Map Link Button */
+    .map-link-btn {
+        display: inline-block;
+        margin-top: 1.5rem;
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+        text-align: center;
+        text-decoration: none;
+        color: #fff;
+        background: #005eb8;
+        border-radius: 4px;
+        border: none;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        cursor: pointer;
+    }
   </style>
 </head>
 
 <body>
   
+
+
  <header style="display:flex; align-items:center; gap:0.6rem; margin-bottom:1.5rem;">
 
   <div>
@@ -119,10 +137,9 @@
 
      <img src="images/evelina-logo-tp.png"
        alt="Evelina London"
-       style="height:48px; width:auto; flex-shrink:0;">
+       style="height:60px; width:auto; flex-shrink:0;">
    
 </header>
-
 
   <section class="search-box">
     <input
@@ -131,72 +148,44 @@
       placeholder="Enter full postcode (e.g. SE1 7EH), outward code (e.g. SE1), area prefix (e.g. SE) or hospital name (e.g. Queen's Romford)…"
     />
     <div class="hint">
-      Data source: London Neonatal Networks &amp; HO.ME tool (Sept 2025). Try typing “SE”, “SW”, “NW”, “E”, etc. to see all units covering that area.
+      Data source: London Neonatal Networks & HO.ME tool (Sept 2025).
     </div>
   </section>
 
   <section id="results" class="results"></section>
   
-<section style="margin: 1.5rem 0;">
-  <h2 style="margin-bottom:0.5rem;">London Neonatal & Maternity Catchment Map</h2>
-
-  <div style="
-    position: relative;
-    width: 100%;
-    padding-bottom: 56.25%; /* 16:9 aspect ratio */
-    height: 0;
-    overflow: hidden;
-    border-radius: 8px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
-  ">
-    <iframe 
-      src="https://www.google.com/maps/d/u/0/embed?mid=1e_VFhHS_iYmjecO8lu2MuR2yJ3vivkJm&z=11"
-      style="
-        position: absolute;
-        top:0;
-        left:0;
-        width:100%;
-        height:100%;
-        border:0;
-      "
-      loading="lazy"
-      allowfullscreen
-    ></iframe>
-  </div>
-
-<p class="hint" style="margin-top:0.5rem; font-size:0.85rem; color:#555; line-height:1.35;">
-  <strong>London Maternity &amp; Neonatal Catchment Map</strong><br><br>
-
-  This interactive map shows maternity and neonatal catchment areas across the five London Maternity &amp; Neonatal Services regions. 
-  You can use it to confirm which hospital covers a baby’s home postcode.<br><br>
-
-  <strong>How to use the map (inside this app):</strong><br>
-  <strong>1. Use the search bar at the top of the map</strong><br>
-  Enter the full postcode of the mother or baby (e.g. <em>SE1 7EH</em>) and press <strong>Enter</strong>.<br>
-  The map will zoom directly to that location.<br><br>
-
-  <strong>2. Clear the postcode (important!)</strong><br>
-  After it zooms in, delete the postcode from the map’s search box.<br>
-  This allows you to see and click the coloured catchment area beneath the search result.<br><br>
-
-  <strong>3. Tap the coloured catchment area</strong><br>
-  Each coloured region represents a maternity / neonatal provider.<br>
-  After tapping, a pop-up will appear showing the name of the responsible hospital.<br><br>
-
-  <strong>Notes:</strong><br>
-  Some catchment areas use the Trust’s full name rather than the commonly used hospital site name.<br>
-  Example: <em>PRUH</em> appears as:<br>
-  <em>“King’s College Hospital NHS Foundation Trust – Princess Royal University Hospital”</em><br>
-  Make sure to read the full name when confirming the provider.
-</p>
+<section style="margin: 2rem 0;">
+  <h2 style="margin-bottom:0.5rem; font-size:1.4rem;">London Neonatal & Maternity Catchment Map</h2> <p class="hint" style="margin-top:0.5rem; font-size:0.85rem; color:#111; line-height:1.4;">
+    ⚠️ **Important Difference between Search and Map**<br>
+    The search box above uses the **outward code** (first half of postcode) which may show **multiple** local units.<br>
+    The interactive map (via the link below) allows you to enter the **full postcode** for a more precise, single catchment area match.
+  </p>
+  
+  <a 
+      href="https://www.google.com/maps/d/u/0/embed?mid=1e_VFhHS_iYmjecO8lu2MuR2yJ3vivkJm&z=11"
+      target="_blank"
+      class="map-link-btn"
+      rel="noopener noreferrer"
+  >
+    View London Maternity & Neonatal Catchment Map (Interactive)
+  </a>
+  
+  <p class="hint" style="margin-top:1.5rem; font-size:0.85rem; color:#555; line-height:1.35;">
+    **Map Instructions:**<br>
+    1. **Search**: Enter the full postcode (e.g., *SE1 7EH*) into the map's search box and press Enter.<br>
+    2. **Clear Search**: Delete the postcode from the map's search box to view the coloured area beneath the result.<br>
+    3. **Tap Area**: Tap the coloured region to see a pop-up with the name of the responsible hospital.<br>
+    *Note: The map is not a product of this tool's creator. Source/Credit needed.*
+  </p>
 
 </section>
 
   
   <footer>
      
-    HO.ME v2025.09 • For clinical reference only. Always check latest ODN guidance / retrieval advice.
-    Copyright Erin Coupland (2025)
+    HO.ME v2025.09 • For clinical reference only. Always check latest ODN guidance / retrieval advice.<br>
+    This tool was designed and developed by Erin Coupland with help from colleagues at Evelina London Children's Hospital.<br>
+    The interactive catchment map is external and not the work of the HO.ME tool creator.
   </footer>
 
   <script>
@@ -767,17 +756,17 @@
 
 
     function outwardFromPostcode(pc) {
-  // Normalise and strip spaces
-  const value = normaliseInput(pc).replace(/\s+/g, "");
+      // Normalise and strip spaces
+      const value = normaliseInput(pc).replace(/\s+/g, "");
 
-  // UK outward code = everything except the last 3 characters
-  if (value.length > 3) {
-    return value.slice(0, value.length - 3);
-  }
+      // UK outward code = everything except the last 3 characters
+      if (value.length > 3) {
+        return value.slice(0, value.length - 3);
+      }
 
-  // Fallback – in case someone types something odd but passes regex
-  return value;
-}
+      // Fallback – in case someone types something odd but passes regex
+      return value;
+    }
 
 
     
@@ -996,4 +985,3 @@
   </script>
 </body>
 </html>
-
